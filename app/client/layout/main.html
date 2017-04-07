@@ -45,7 +45,6 @@
            document.querySelector('body').classList.remove('changeContrast');
             console.log("IK WERK OOK");
         })
-        document.querySelector('body').classList.add('changeContrast');
 
         document.getElementById('contrast').addEventListener('click', function(){
            document.querySelector('body').classList.add('changeContrast');
@@ -53,15 +52,15 @@
         })
     </script>
     <script>
-        document.getElementById('hide').addEventListener('click', function(){
-           document.getElementById('dd-content').classList.remove('pu-dropdown-active');
-            console.log("ZIE JE ME");
-        })
-        document.getElementById('dd-content').classList.add('pu-dropdown-active');
-
-        document.getElementById('contrast-dd').addEventListener('click', function(){
+           document.getElementById('contrast-dd').addEventListener('click', function(){
            document.getElementById('dd-content').classList.add('pu-dropdown-active');
             console.log("JA IK ZIE JE");
         })
+
+        document.getElementById('hide').addEventListener('click', function(){
+            document.getElementById('dd-content').classList.remove('pu-dropdown-active');
+            console.log("ZIE JE ME");
+        })
+
     </script>
 </template>

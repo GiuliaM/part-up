@@ -1,164 +1,97 @@
-Part-up
+Part-up contrast contribution
 =================
 
-[Join the conversation of the Platform Development tribe on Part-up] (https://part-up.com/tribes/development/chat)
+My contribution is adding a toggle between the normal stylesheet of the website and a stylsheet optimized for users that need more contrast to see the difference between elements.
 
-# Installation
+These users are people who visite the website outside when the sun is shinning and users that are colorblind.
 
-- ensure [imagemagick][im] is installed (OS X: `brew install imagemagick`)
-- ensure [ansible](https://valdhaus.co/writings/ansible-mac-osx/) is installed (OS X: `brew install ansible`)
-- ensure [meteor](https://www.meteor.com/install) is installed
-- make sure you have all the correct environment variables set, which can be done in two ways:
-    1. generate the development configuration using `cd config/development && ./decrypt` (this requires a password, which can be requested from the Part-up team)
-    2. copy the file `config/development/env.sh.dist` to `config/development/env.sh` and fill in all the required credentials
-- `./start` (in the root folder of the app)
-- App running at: http://localhost:3000/
+## Index
+- [Changes](#changes)
+- [Result](#result)
 
-[im]: http://www.imagemagick.org/
+--------
 
-# Frontend
+## [Changes](#changes)
+The things I changed was adding two scripts, adding a new stylesheet and adding a button/navigation item.
 
-## Structure
-We have four types of application parts: *layout*, *page*, *widget* and *small component*. The explanation below points out their uses. Grahpic: **app/packages/partup:client-pages/app** and for the modals **app/packages/partup:client-pages/modal**.
+# HTML
+The HTML I changed was for the buttons for the dropdown menu/toggle. I made these changes in the logo.html because I couldn't access the menu. I made 3 buttons, two for the contrast and one for the menu.
 
-### Layout
-Layouts are the top-level templates. They can contain a header, current page placeholder and footer. The Sass file should only contain header and footer positioning rules. The js file should keep track of the state of the template and handle navigation functionality.
-
-### Page
-Pages can contain single components with page-specific functionality, widgets (packages) and sub-pages. A page, in fact, only represents a composition. Therefore, the Sass file should only contain position defenitions of the inside components. The js file should handle the page states and navigation functionality if subpages are present. Pages are directly binded to routes.
-
-### Widget (packages)
-With a funcionality, you can think of a widget which will fulfill one standalone functionality. Functionalities that tie the app together (like a navigation bar) should not be declared as a package, because it’s not a widget with a standalone functionality. The Sass file may only contain component composition rules. When a widget is called WidgetsPartupActivities, the package should be called partup:client-widgets-partup-activities.
-
-### Small component
-The whole app is made up of small styled components. These components are not functional by themselves, but only provides styling. For example: buttons, inputs, titles, paragraphs and menus. Each component should be defined as a Sass class prefixed with “pu-”, for example “pu-button”. Be aware not to define any styling dealing with the position of the component inside its parent or relative to its siblings.
-
-### Adding an icon
-1. `cd app/`
-2. `meteor add partup-iconfont-generator`
-3. Add the new icon SVG to the */client/icons* folder, **dot not use this folder for anything else than the iconfont icons**
-4. Name the icon svg file properly (upload icon should be named `upload.svg`, not `icon_upload.svg`, don't use a prefix like `icon_` for consistency)
-5. Wait for `[iconfont] generating`
-6. In */client/stylesheets/font-faces* a new `_picons.sass` is generated, NOTE: `_picons.sass` cannot be used to change icon styles, do this in */client/stylesheets/components/pu-icons.sass*
-7. check in **all** supported browsers if icons still work, **especially IE**
-8. `meteor remove partup-iconfont-generator`
-9. You now have a new icon added to the project *cheers*. Push the icon file changes to your current branch.
-
-
-# Backend
-## Collections manipulation flow
-
-- Frontend uses `Meteor.call` to insert, update or remove documents in a collection.
-- Backend checks if the logged in user is authorised to perform the given operation (inside a Meteor method).
-- Backend saves document in mongodb
-- Backend emits an event that corresponds with the given CRUD operation, e.g. `inserted, updated or removed` (inside a Meteor method).
-- Handlers are created that have to react to these created events, for instance when inserting an update or notification.
-
-# Fixtures
-
-- the following users are created automatically (all with password "user"):
-    - user@example.com
-    - john@example.com
-    - judy@example.com
-    - admin@example.com
-- admin created all the tribes
-- john is member of closed tribe and created a closed partup
-- user is member of open and invite tribe and created a partups in these tribes
-- judy is invited for closed tribe
-
-# Application testing
-
-Please take a look as this epic:  https://github.com/part-up/part-up/issues/528
-There is a specific chapter written about how to test a meteor application like part-up.com.
-
-### Unit and integration testing
-`npm run test:watch`
-
-### End to end test
-`npm run test:e2e`
-
-
-# DevOps
-
-## Quick deployment
-- `cd devops`
-- `./devops provision <environment> all --tags=app` (provide the SHA hash of the commit to be deployed, make sure it is build by Jenkins upfront)
-
-## MongoDB
-
-- Connecting: `mongo "<host>/<database>" -u "<user>" -p "<password>"`
-- Dumping: `mongodump "<host>" --db "<database>" -u "<user>" -p "<password>" -o \`date +%s\``
-- Restoring: `mongorestore "<host>" --db "<database>" -u "<user>" -p "<password>"`
-- Restoring Meteor LoginServiceConfiguration: `mongorestore "<host>" --db "<database>" -u "<user>" -p "<password>" -c "meteor_accounts_loginServiceConfiguration" <bson file from dump>`
-- Emptying all Collections (run in mongo shell): `db.getCollectionNames().forEach(function(collectionName) { db[collectionName].remove({}); });`
-- Make user (super)admin: `db.users.update({ '_id': '<insertuseridhere>' }, { $set: { 'roles': ['admin'] } })`
-- Find faulty / wrongly uploaded pictures: `db.getCollection('cfs.images.filerecord').find({'copies':{$exists:false}})`
-- Overwrite the language of a specific part-up: `db.getCollection('partups').find({'_id':'<<partupid>>'},{$set: {'language':'nl'}});`
-
-## Unit testing
-- `meteor run --test`
-
-## Required server environment variables
-```
-NODE_ENV
-MONGO_URL
-ROOT_URL
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
-AWS_BUCKET_REGION
-AWS_BUCKET_NAME
-FACEBOOK_APP_ID
-FACEBOOK_APP_SECRET
-LINKEDIN_API_KEY
-LINKEDIN_SECRET_KEY
-TZ = Europe/Amsterdam
-MAIL_URL
-FLICKR_API_KEY
-FLICKR_SECRET_KEY
-NEW_RELIC_LICENSE_KEY
-NEW_RELIC_APP_NAME
-NEW_RELIC_NO_CONFIG_FILE = true
-KADIRA_APP_ID
-KADIRA_APP_SECRET
-METEOR_SETTINGS = {"public":{"analyticsSettings":{"Google Analytics":{"trackingId":""}}}}
-GOOGLE_API_KEY
+```html
+ <button class="pu-button pu-button-header pu-button-header-text" data-toggle-menu="menu" id="contrast-dd" onclick=""> Contrast
+       <i class="picon-caret-slim-down"></i>
+       </button>
+       <div class="pu-dropdown pu-dropdown-simple pu-dropdown-more" id="dd-content" data-clickoutside-close>
+           <ul class="pu-list">
+               <li>
+                    <button id="no-contrast" onclick="">
+                        Normaal
+                    </button>
+               </li>
+               <li>
+                    <button id="contrast">
+                        Hoog contrast
+                    </button>
+               </li>
+           </ul>
+       </div>
+       <section class="hide" id="hide" onclick="">
+           <p>xx</p>
+       </section>
 ```
 
-## data dumps
+# CSS
+I created a new stylesheet for the .changeContrast. By doing this I could change the styles, but not overwrite the original ones. I altred the CSS in colorsContrast.sass which is located in app > client > stylesheets > variables. In the stylesheet I tried to use as much color variables from the stylesheet colors.sass to try to honor the styleguide.
 
-### clean userdump
-- regular mongo dump command
-- unpack bson `for f in *.bson; do bsondump "$f" > "$f.json"; done`
-- `cat users.bson.json | sed 's/accessToken" : "[^"]*"/accessToken" : ""/g' > users.bson-clean.json`
-- `cat users.bson-clean.json | sed 's/hashedToken" : "[^"]*"/hashedToken" : ""/g' > users.bson-clean-2.json`
-- `cat users.bson-clean-2.json | sed 's/bcrypt" : "[^"]*"/bcrypt" : ""/g' > users.bson-clean-3.json`
-- `cat users.bson-clean-3.json | sed 's/token" : "[^"]*"/token" : ""/g' > users.bson-clean-4.json`
+# JavaScript
+To be able to switch between the contrast I needed to add a toggle. With this script I said that if the button 'normaal' was clicked it has to remove the classname changeContrast from the body. If the button 'hoog contrast' is clicked, than it should add the class changeContrast to the body and it will switch to the other stylesheet. (For the demos I placed the codes in the main.html)
 
-## editing env.sh-ecrypted
+```javascript
+        document.getElementById('no-contrast').addEventListener('click', function(){
+           document.querySelector('body').classList.remove('changeContrast');
+            console.log("IK WERK OOK");
+        })
 
-`cd config/development && ansible-vault edit env.sh-encrypted`
+        document.getElementById('contrast').addEventListener('click', function(){
+           document.querySelector('body').classList.add('changeContrast');
+            console.log("IK WERK");
+        })
+```
 
-## Phraseapp translation
-Add new keys using the i18n convention to the main locale
-[/part-up/app/i18n/phraseapp.en.i18n.json](https://github.com/part-up/part-up/blob/master/app/i18n/phraseapp.en.i18n.json)
-and commit them to your branch.
+Another script I used was to make a dropdown menu-item for the contrast buttons. I used the same principle as I dit with the stylesheet toggle.
 
-After merging the PR for your branch, [Ralph Boeije](https://github.com/ralphboeije) will import the new keys to [Phraseapp](https://phraseapp.com/accounts/part-up-com/projects/part-up-webapp/locales) and add the translations to the other locales.
+```javascript
+        document.getElementById('contrast-dd').addEventListener('click', function(){
+           document.getElementById('dd-content').classList.add('pu-dropdown-active');
+            console.log("JA IK ZIE JE");
+        })
 
-# License
+        document.getElementById('hide').addEventListener('click', function(){
+            document.getElementById('dd-content').classList.remove('pu-dropdown-active');
+            console.log("ZIE JE ME");
+        })
+```
+------
 
-Copyright (C) 2017 Part-up
+## [Result](#result)
+For the complete results of my research check this PDF.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+I used a tool called 'Contrast Ratio Checker'. It gives information about font sizes, colors, the ratio and if it is approved according to WCAG 2.0. This is what it was before:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
+<img src="CRC.png" alt="Overview Contrast Ratio Checker" height="400px">
 
-You should have received a copy of the GNU Affero General Public License
-along with this program. You can find it at [/part-up/LICENSE](https://github.com/part-up/part-up/blob/master/LICENSE)
-and the supplement at [/part-up/License supplement](https://github.com/part-up/part-up/blob/master/License%20supplement)
+After improving the website it became this:
+
+<img src="CRCA.png" alt="Overview Contrast Ratio Checker after the optimalization" height="400px">
+
+As you can see I improved almost every ratio, except for the color orange. This color isn't a good match for the background and the only way I can solve that problem is changing the color.
+
+
+## Resources
+- https://webdesignledger.com/the-principle-of-contrast-in-web-design/
+- http://www.webdesignerdepot.com/2010/09/fully-understanding-contrast-in-design/
+- https://24ways.org/2013/why-bother-with-accessibility/
+- https://24ways.org/2012/colour-accessibility/
+- https://www.smashingmagazine.com/2014/10/color-contrast-tips-and-tools-for-accessibility/
+- http://tomkenny.design/articles/the-principles-of-good-web-design-part-3-colour/
+- http://veen.com/jeff/archives/000503.html
