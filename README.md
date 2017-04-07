@@ -74,7 +74,7 @@ Another script I used was to make a dropdown menu-item for the contrast buttons.
 ------
 
 ## [Result](#result)
-For the complete results of my research check this <img src="ContrastRatioResearch.pdf">
+For the complete results of my research check this <a href="ContrastRatioResearch.pdf">PDF</a>.
 
 I used a tool called 'Contrast Ratio Checker'. It gives information about font sizes, colors, the ratio and if it is approved according to WCAG 2.0. This is what it was before:
 
