@@ -1,8 +1,32 @@
 <template name="Header_logo">
-    <a href="{{ pathFor 'home' }}">
-        <h1>
-            <span>{{_ 'header-title' }}</span>
-            <figure class="pu-brand"></figure>
-        </h1>
-    </a>
+   <section class="logo">
+        <a href="{{ pathFor 'home' }}">
+            <h1>
+                <span>{{_ 'header-title' }}</span>
+                <figure class="pu-brand"></figure>
+            </h1>
+        </a>
+    </section>
+
+      <button class="pu-button pu-button-header pu-button-header-text" data-toggle-menu="menu" id="contrast-dd" onclick=""> Contrast
+       <i class="picon-caret-slim-down"></i>
+       </button>
+       <div class="pu-dropdown pu-dropdown-simple pu-dropdown-more" id="dd-content" data-clickoutside-close>
+           <ul class="pu-list">
+               <li>
+                    <button id="no-contrast" onclick="">
+                        Normaal
+                    </button>
+               </li>
+               <li>
+                    <button id="contrast">
+                        Hoog contrast
+                    </button>
+               </li>
+           </ul>
+       </div>
+       <section class="hide" id="hide" onclick="">
+           <p>xx</p>
+       </section>
+
 </template>
